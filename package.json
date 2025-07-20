@@ -26,6 +26,10 @@
     "@eslint/js": "^9.26.0",
     "@jest/globals": "^30.0.0",
     "@jest/types": "^30.0.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@sveltejs/kit": "^2.25.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.1",
     "bun": "^1.2.13",
@@ -34,6 +38,7 @@
     "globals": "^16.1.0",
     "jest": "^30.0.0",
     "prettier": "^3.5.3",
+    "rollup": "^4.45.1",
     "ts-jest": "^29.4.0",
     "tsup": "^8.5.0",
     "typescript-eslint": "^8.32.0"
