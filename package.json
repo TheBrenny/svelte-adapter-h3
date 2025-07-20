@@ -8,12 +8,16 @@
     "postinstall": "bun run format",
     "start": "bun run src/index.ts",
     "test": "jest",
-    "build": "tsup",
+    "dev": "rollup -cw",
+    "build": "tsup && rollup -c",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "check": "tsc --noEmit",
     "changesets": "npx @changesets/cli"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/bun": "latest"
   },
