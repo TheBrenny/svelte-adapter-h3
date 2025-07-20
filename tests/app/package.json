@@ -1,5 +1,5 @@
 {
-  "name": "test-hono-handler",
+  "name": "test-adapter-hono",
   "version": "0.0.0",
   "private": true,
   "scripts": {
