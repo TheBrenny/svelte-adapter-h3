@@ -1,4 +1,4 @@
-import adapter from "@sveltejs/adapter-node";
+import adapter from "../../dist/index.js";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
