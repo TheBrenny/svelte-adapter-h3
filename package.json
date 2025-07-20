@@ -5,6 +5,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "postinstall": "bun run format",
     "start": "bun run src/index.ts",
     "test": "jest",
     "build": "tsup",
