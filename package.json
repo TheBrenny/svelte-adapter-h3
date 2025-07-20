@@ -48,6 +48,6 @@
     "node": ">=18.20.8"
   },
   "workspaces": [
-    "tests/apps/*"
+    "tests/app"
   ]
 }
