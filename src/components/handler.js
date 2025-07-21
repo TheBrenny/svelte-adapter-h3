@@ -118,13 +118,13 @@ function serve(path, client = false) {
     fs.existsSync(path) &&
     serveStaticWithAbsolutePath({
       root: path,
-      onFound: client
-        ? (path, c) => {
-            if (path.startsWith(`/${manifest.appPath}/immutable/`)) {
-              c.res.headers.append("cache-control", "public,max-age=31536000,immutable");
-            }
+      onFound:
+        client &&
+        ((path, c) => {
+          if (path.startsWith(`/${manifest.appPath}/immutable/`)) {
+            c.res.headers.append("cache-control", "public,max-age=31536000,immutable");
           }
-        : undefined
+        })
     })
   );
 }
