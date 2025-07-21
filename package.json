@@ -12,7 +12,7 @@
     "dev": "rollup -cw",
     "build": "tsup && rollup -c",
     "format": "prettier --write .",
-    "lint": "prettier --check . && eslint .",
+    "lint": "prettier --check ./src/**/*.ts && eslint ./src/**/*.ts",
     "check": "tsc --noEmit",
     "changeset": "npx @changesets/cli",
     "prepublishOnly": "bun run build"
