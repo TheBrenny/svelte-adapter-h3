@@ -5,6 +5,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "prepare": "bun run build",
     "postinstall": "bun run format",
     "start": "bun run src/index.ts",
     "test": "vitest run",
