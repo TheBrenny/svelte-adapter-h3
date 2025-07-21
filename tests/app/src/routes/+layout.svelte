@@ -16,3 +16,9 @@
 </nav>
 
 {@render children()}
+
+<style>
+    nav a {
+        margin-left: 5px;
+    }
+</style>
