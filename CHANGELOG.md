@@ -1,4 +1,4 @@
-# test-adapter-hono
+# adapter-hono
 
 ## 1.0.0
 
