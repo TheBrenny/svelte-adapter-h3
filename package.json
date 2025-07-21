@@ -5,8 +5,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "prepare": "bun run build",
-    "postinstall": "bun run format",
+    "package": "bun run build",
+    "postinstall": "bun run format && npm run package --workspaces",
     "start": "bun run src/index.ts",
     "test": "vitest run",
     "dev": "rollup -cw",
