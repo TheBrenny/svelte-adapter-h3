@@ -26,6 +26,10 @@
     "svelte",
     "sveltekit"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ROBOTofficial/adapter-hono.git"
+  },
   "files": [
     "dist"
   ],
