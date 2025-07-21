@@ -16,6 +16,15 @@
     "changeset": "npx @changesets/cli",
     "prepublishOnly": "bun run build"
   },
+  "keywords": [
+    "adapter",
+    "deploy",
+    "hosting",
+    "hono.js",
+    "hono",
+    "svelte",
+    "sveltekit"
+  ],
   "files": [
     "dist"
   ],
