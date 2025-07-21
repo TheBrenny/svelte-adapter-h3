@@ -1,20 +1,47 @@
-# TypeScript Template
+# SvelteKit hono adapter
 
-This template was created to facilitate the creation of typescript projects.
+[Adapter](https://svelte.dev/docs/kit/adapters) for SvelteKit apps that generates a hono server.
 
-## Libs
+## Usage
 
-- Bun (Package Manager)
-- TypeScript
-- ESlint
-- Prettier
-- Changesets
-- Jest
-- Tsup
+### SvelteKit Config
 
-## Settings
+```js
+import adapter from "adapter-hono";
 
-- [Dependa Bot](./.github/dependabot.yml)
-- [CI Test](./.github/workflows/ci.yml)
-- [Changesets release](./.github/workflows/release.yml)
-- [Visual Studio Code](./.vscode/launch.json)
+export default {
+  kit: {
+    adapter: adapter()
+  }
+};
+```
+
+To start up the default server, execute the following command.
+
+```console
+$ npm build
+$ node build/index.js
+```
+
+### Custom server
+
+```js
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+
+import { handler } from "./build/handler.js";
+
+const app = new Hono();
+
+app.use(...handler);
+
+serve(app);
+```
+
+### Enviroment variables
+
+adapter-hono employs the same environment variables as [adapter-node](https://svelte.dev/docs/kit/adapter-node#Environment-variables).
+
+## Respect
+
+[@sveltejs/adapter-node](https://www.npmjs.com/package/@sveltejs/adapter-node)
