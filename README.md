@@ -2,6 +2,12 @@
 
 [Adapter](https://svelte.dev/docs/kit/adapters) for SvelteKit apps that generates a hono server.
 
+## Installation
+
+```console
+npm install adapter-hono
+```
+
 ## Usage
 
 ### SvelteKit Config
