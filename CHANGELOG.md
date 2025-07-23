@@ -1,5 +1,11 @@
 # adapter-hono
 
+## 1.0.1
+
+### Patch Changes
+
+- ba90349: fix: readme
+
 ## 1.0.0
 
 ### Major Changes
