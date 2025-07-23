@@ -48,6 +48,10 @@ serve(app);
 
 adapter-hono employs the same environment variables as [adapter-node](https://svelte.dev/docs/kit/adapter-node#Environment-variables).
 
+### Options
+
+adapter-hono employs the same options as [adapter-node](https://svelte.dev/docs/kit/adapter-node#Options).
+
 ## Respect
 
 [@sveltejs/adapter-node](https://www.npmjs.com/package/@sveltejs/adapter-node)
