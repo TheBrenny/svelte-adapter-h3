@@ -78,7 +78,23 @@ export default [
       json(),
       prefixBuiltinModules()
     ],
-    external: ["ENV", "HANDLER"]
+    external: ["ENV", "HANDLER", "APP"]
+  },
+  {
+    input: "src/components/app.js",
+    output: {
+      file: "src/files/app.js",
+      format: "esm"
+    },
+    plugins: [
+      clearOutput("src/files/app.js"),
+      copyOutput("dist/files/app.js"),
+      nodeResolve({ preferBuiltins: true }),
+      commonjs(),
+      json(),
+      prefixBuiltinModules()
+    ],
+    external: ["HANDLER"]
   },
   {
     input: "src/components/env.js",
