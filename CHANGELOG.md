@@ -1,5 +1,11 @@
 # adapter-hono
 
+## 1.1.0
+
+### Minor Changes
+
+- 0638ef0: add: app.js
+
 ## 1.0.1
 
 ### Patch Changes
