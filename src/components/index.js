@@ -1,8 +1,7 @@
 import process from "node:process";
-import { handler } from "HANDLER";
 import { env } from "ENV";
+import { app } from "APP";
 import { createAdaptorServer } from "@hono/node-server";
-import { Hono } from "hono";
 
 export const path = env("SOCKET_PATH", false);
 export const host = env("HOST", "0.0.0.0");
@@ -31,8 +30,6 @@ let requests = 0;
 let shutdown_timeout_id;
 /** @type {NodeJS.Timeout | void} */
 let idle_timeout_id;
-
-export const app = new Hono().use(...handler);
 
 export const server = createAdaptorServer(app);
 
