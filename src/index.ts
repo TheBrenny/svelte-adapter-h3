@@ -4,7 +4,7 @@ import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import "../ambient.d.ts"
+import "../ambient.d.ts";
 import type { Adapter } from "@sveltejs/kit";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
@@ -13,10 +13,11 @@ type AdapterOptions = {
 	out?: string;
 	precompress?: boolean;
 	envPrefix?: string;
+	emulateBase?: string;
 };
 
 export default function (opts: AdapterOptions = {}): Adapter {
-	const { out = "build", precompress = true, envPrefix = "" } = opts;
+	const { out = "build", precompress = true, envPrefix = "", emulateBase = "http://localhost:5173" } = opts;
 
 	return {
 		name: "svelte-adapter-h3",
@@ -94,6 +95,21 @@ export default function (opts: AdapterOptions = {}): Adapter {
 					ENV_PREFIX: JSON.stringify(envPrefix)
 				}
 			});
+		},
+
+		async emulate() {
+			return {
+				platform(details) {
+					console.log(details)
+					return {
+						req: null,
+						request: (request: string | URL | Request, init?: RequestInit): Promise<Response> => {
+							if (typeof request === "string" && request.startsWith("/")) request = new URL(request, emulateBase);
+							return fetch(request, init)
+						}
+					}
+				}
+			};
 		},
 
 		supports: {
