@@ -3,10 +3,9 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"type": "module",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"scripts": {
 		"package": "npm run build",
-		"postinstall": "npm run format && npm run package --workspaces",
 		"start": "node src/index.ts",
 		"test": "npm run build && npm run build --workspace=test-adapter-h3 && vitest run",
 		"dev": "rollup -cw",
