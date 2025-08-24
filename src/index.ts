@@ -4,7 +4,7 @@ import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-
+import "../ambient.d.ts"
 import type { Adapter } from "@sveltejs/kit";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);

@@ -7,8 +7,8 @@ import { svelteApp } from "./app/build/handler.js";
 describe("H3 handler's tests", () => {
 	const app = new H3();
 
-	app.get("/api/test", () => "this is get request");
-	app.post("/api/test", () => "this is post request");
+	app.get("/api/test", () => ["this is get request"]);
+	app.post("/api/test", () => ["this is post request"]);
 
 	app.all("/**/*", ({ req }) => {
 		return svelteApp.fetch(req);
@@ -46,12 +46,12 @@ describe("H3 handler's tests", () => {
 	test("api check (get)", async () => {
 		const res = await client.get("/api/test");
 		expect(res.status).toBe(200);
-		expect(res.text).toBe("this is get request");
+		expect(res.text).toBe(`["this is get request"]`);
 	});
 
 	test("api check (post)", async () => {
 		const res = await client.post("/api/test");
 		expect(res.status).toBe(200);
-		expect(res.text).toBe("this is post request");
+		expect(res.text).toBe(`["this is post request"]`);
 	});
 });

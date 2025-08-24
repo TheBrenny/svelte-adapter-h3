@@ -1,13 +1,6 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
-import "../../ambient.d.ts"
-
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-        interface Platform {
+    namespace App {
+        export interface Platform {
             /**
              * The original Node request object (https://nodejs.org/api/http.html#class-httpincomingmessage)
              */
@@ -17,7 +10,5 @@ declare global {
              */
             request: ((input: RequestInfo | URL, init?: RequestInit) => Promise<Response>) | ((request: ServerRequest | URL | string, options?: RequestInit, context?: H3EventContext) => Response | Promise<Response>);
         }
-	}
+    }
 }
-
-export {};
