@@ -1,30 +1,23 @@
 import request from "supertest";
-import { Hono } from "hono";
-import { createServer } from "node:http2";
-import { serve } from "@hono/node-server";
+import { H3, serve } from "h3";
 import { beforeAll, describe, expect, test } from "vitest";
 
-import { handler } from "./app/build/handler.js";
+import { svelteApp } from "./app/build/handler.js";
 
-describe("Hono handler's tests", () => {
-  const app = new Hono();
+describe("H3 handler's tests", () => {
+  const app = new H3();
 
-  app.get("/api/test", (c) => {
-    return c.text("this is get request");
+  app.get("/api/test", () => "this is get request");
+  app.post("/api/test", () => "this is post request");
+
+  app.all("/**/*", ({ req }) => {
+    return svelteApp.fetch(req);
   });
 
-  app.post("/api/test", (c) => {
-    return c.text("this is post request");
-  });
-
-  app.use(...handler);
-
-  const server = serve({
-    fetch: app.fetch,
-    createServer
-  });
-
-  const client = request(server, { http2: true });
+  const server = serve(app);
+  if (server.node === undefined) throw new Error("This runtime is not node");
+  if (server.node.server === undefined) throw new Error("Server is not running");
+  const client = request(server.node.server);
 
   beforeAll(() => {
     server.close();

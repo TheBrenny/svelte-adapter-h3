@@ -3,16 +3,15 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { H3, serveStatic } from "h3";
 import { parse as polka_url_parser } from "@polka/url";
 import { getRequest, createReadableStream } from "@sveltejs/kit/node";
 import { Server } from "SERVER";
 import { manifest, prerendered, base } from "MANIFEST";
 import { env } from "ENV";
-import { serveStaticWithAbsolutePath } from "hono-absolute-serve-static";
 
 /**
- * @typedef {import('hono').MiddlewareHandler<{ Bindings: import('@hono/node-server').HttpBindings }>} HonoMiddleware
- * @typedef {Array<HonoMiddleware>} HonoMiddlewares
+ * @typedef {import('h3').Middleware} H3Middleware
  */
 
 /**
@@ -21,7 +20,7 @@ import { serveStaticWithAbsolutePath } from "hono-absolute-serve-static";
  * @param {string} value - Size in bytes. Can also be specified with a unit suffix kilobytes (K), megabytes (M), or gigabytes (G).
  * @returns {number}
  */
-export function parse_as_bytes(value) {
+function parse_as_bytes(value) {
   const multiplier =
     {
       K: 1024,
@@ -60,7 +59,6 @@ await server.init({
 });
 
 /**
- *
  * @param {Request} request
  * @param {import('http').IncomingMessage} req
  */
@@ -110,29 +108,39 @@ async function create_server_responsed(request, req) {
 }
 
 /**
- * @param {string} path
+ * @param {string} base
  * @param {boolean} client
  */
-function serve(path, client = false) {
-  return (
-    fs.existsSync(path) &&
-    serveStaticWithAbsolutePath({
-      root: path,
-      onFound:
-        client &&
-        ((path, c) => {
-          if (path.startsWith(`/${manifest.appPath}/immutable/`)) {
-            c.res.headers.append("cache-control", "public,max-age=31536000,immutable");
-          }
-        })
-    })
-  );
+function serve(base, client = false) {
+  if (!fs.existsSync(base)) return false;
+  return (event) => {
+    let headers = {};
+    if (client && event.url.pathname.startsWith(`/${manifest.appPath}/immutable/`)) {
+      headers["cache-control"] = "public,max-age=31536000,immutable";
+    }
+    return serveStatic(event, {
+      async getContents(id) {
+        return fs.promises.readFile(path.join(base, id));
+      },
+      async getMeta(id) {
+        const stats = await fs.promises.stat(path.join(base, id)).catch(() => undefined);
+        if (stats?.isFile()) {
+          return {
+            size: stats.size,
+            mtime: stats.mtimeMs
+          };
+        }
+      },
+      headers,
+      fallthrough: true
+    });
+  };
 }
 
-/** @returns {HonoMiddleware} */
+/** @returns {H3Middleware} */
 function serve_prerendered() {
-  return async (c, next) => {
-    const req = c.env.incoming;
+  return async (event, next) => {
+    const req = event.req;
     let { pathname, search, query } = polka_url_parser(req);
 
     try {
@@ -142,25 +150,40 @@ function serve_prerendered() {
     }
 
     if (prerendered.has(pathname)) {
-      return await serveStaticWithAbsolutePath({
-        root: path.join(dir, "prerendered")
-      })(c, next);
+      return await serveStatic(event, {
+        async getContents(id) {
+          return fs.promises.readFile(path.join(dir, "prerendered", id));
+        },
+        async getMeta(id) {
+          const stats = await fs.promises.stat(path.join(dir, "prerendered", id));
+          if (stats?.isFile()) {
+            return {
+              size: stats.size,
+              mtime: stats.mtimeMs
+            };
+          }
+        },
+        headers: {
+          "cache-control": "public,max-age=31536000,immutable"
+        },
+        fallthrough: true
+      });
     }
 
     let location = pathname.at(-1) === "/" ? pathname.slice(0, -1) : pathname + "/";
     if (prerendered.has(location)) {
       if (query) location += search;
-      return c.redirect(location, 308);
+      return event.redirect(location, 308);
     } else {
       return await next();
     }
   };
 }
 
-/** @type {HonoMiddleware} */
+/** @type {H3Middleware} */
 const ssr = async (c) => {
-  let request = c.req.raw;
-  const req = c.env.incoming;
+  let request = c.req;
+  const req = c.runtime.node.req;
 
   try {
     request = await getRequest({
@@ -169,7 +192,7 @@ const ssr = async (c) => {
       bodySizeLimit: body_size_limit
     });
   } catch {
-    return c.text("Bad Request", 400);
+    return new Response("Bad Request", { status: 400 });
   }
 
   return await create_server_responsed(request, req);
@@ -190,10 +213,13 @@ function get_origin(headers) {
   }
 }
 
-/** @type {HonoMiddlewares} */
-export const handler = [
+const routeHandlers = [
   serve(path.join(dir, "client"), true),
   serve(path.join(dir, "static")),
   serve_prerendered(),
   ssr
 ].filter(Boolean);
+
+const svelteApp = new H3();
+routeHandlers.forEach((h) => svelteApp.use(h));
+export { svelteApp };

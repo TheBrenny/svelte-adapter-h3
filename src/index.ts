@@ -86,7 +86,6 @@ export default function (opts: AdapterOptions = {}): Adapter {
 
       builder.copy(files, out, {
         replace: {
-          APP: "./app.js",
           ENV: "./env.js",
           HANDLER: "./handler.js",
           MANIFEST: "./server/manifest.js",

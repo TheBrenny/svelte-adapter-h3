@@ -1,7 +1,7 @@
 import process from "node:process";
 import { env } from "ENV";
-import { app } from "APP";
-import { createAdaptorServer } from "@hono/node-server";
+import { handler } from "HANDLER";
+import { serve } from "h3";
 
 export const path = env("SOCKET_PATH", false);
 export const host = env("HOST", "0.0.0.0");
@@ -31,22 +31,24 @@ let shutdown_timeout_id;
 /** @type {NodeJS.Timeout | void} */
 let idle_timeout_id;
 
-export const server = createAdaptorServer(app);
+export const server = serve(handler, {
+  manual: true
+  // TODO: protocol: "https"
+}).node.server;
 
 if (socket_activation) {
   server.listen({ fd: SD_LISTEN_FDS_START }, () => {
     console.log(`Listening on file descriptor ${SD_LISTEN_FDS_START}`);
   });
+} else if (path) {
+  server.listen(path, () => {
+    console.log(`Listening on ${path}`);
+  });
+  // TODO: add https
 } else {
-  if (path) {
-    server.listen(path, () => {
-      console.log(`Listening on ${path}`);
-    });
-  } else {
-    server.listen(port, host, () => {
-      console.log(`Listening on http://${host}:${port}`);
-    });
-  }
+  server.listen(port, host, () => {
+    console.log(`Listening on http://${host}:${port}`);
+  });
 }
 
 /** @param {'SIGINT' | 'SIGTERM' | 'IDLE'} reason */
