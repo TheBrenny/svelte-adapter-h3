@@ -1,13 +1,13 @@
 {
-  "name": "adapter-hono",
+  "name": "@thebrenny/svelte-adapter-hono",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
-    "package": "bun run build",
-    "postinstall": "bun run format && npm run package --workspaces",
-    "start": "bun run src/index.ts",
+    "package": "npm run build",
+    "postinstall": "npm run format && npm run package --workspaces",
+    "start": "node src/index.ts",
     "test": "vitest run",
     "dev": "rollup -cw",
     "build": "tsup && rollup -c",
@@ -15,7 +15,7 @@
     "lint": "prettier --check ./src/**/*.ts && eslint ./src/**/*.ts",
     "check": "tsc --noEmit",
     "changeset": "npx @changesets/cli",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "adapter",
@@ -33,9 +33,6 @@
   "files": [
     "dist"
   ],
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
   "peerDependencies": {
     "typescript": "^5"
   },
@@ -52,7 +49,6 @@
     "@sveltejs/kit": "^2.25.2",
     "@types/node": "^24.1.0",
     "@types/supertest": "^6.0.3",
-    "bun": "^1.2.13",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.1.0",
