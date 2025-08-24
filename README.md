@@ -16,9 +16,9 @@ npm install svelte-adapter-h3
 import adapter from "svelte-adapter-h3";
 
 export default {
-  kit: {
-    adapter: adapter()
-  }
+	kit: {
+		adapter: adapter()
+	}
 };
 ```
 

@@ -1,11 +1,11 @@
 import { getRequestEvent } from "$app/server";
 
 export async function load() {
-  await Promise.resolve();
+	await Promise.resolve();
 
-  const event = getRequestEvent();
+	const event = getRequestEvent();
 
-  return {
-    pathname: event.url.pathname
-  };
+	return {
+		pathname: event.url.pathname
+	};
 }
