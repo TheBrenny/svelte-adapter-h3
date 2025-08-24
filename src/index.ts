@@ -99,8 +99,7 @@ export default function (opts: AdapterOptions = {}): Adapter {
 
 		async emulate() {
 			return {
-				platform(details) {
-					console.log(details)
+				platform() {
 					return {
 						req: null,
 						request: (request: string | URL | Request, init?: RequestInit): Promise<Response> => {
