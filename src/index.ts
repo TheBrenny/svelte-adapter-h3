@@ -19,10 +19,10 @@ export default function (opts: AdapterOptions = {}): Adapter {
   const { out = "build", precompress = true, envPrefix = "" } = opts;
 
   return {
-    name: "adapter-hono",
+    name: "svelte-adapter-h3",
 
     async adapt(builder) {
-      const tmp = builder.getBuildDirectory("adapter-hono");
+      const tmp = builder.getBuildDirectory("svelte-adapter-h3");
 
       builder.rimraf(out);
       builder.rimraf(tmp);
